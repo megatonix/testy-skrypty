@@ -22,16 +22,21 @@ sudo apt-get purge docker-ce docker-ce-cli containerd.io docker-compose-plugin
 
 echo "Removing docker binaries..."
 rm -f /usr/local/bin/docker
-rm -f /usr/local/bin/docker-machine
-rm -r /usr/local/bin/docker-machine-driver*
-rm -f /usr/local/bin/docker-compose
+rm -rf /var/lib/docker
+rm -rf /var/lib/containerd
 
-echo "Removing boot2docker.iso"
-rm -rf /usr/local/share/boot2docker
+echo "Auto-Removing..."
+apt auto-remove
 
 echo "All Done!" 
+clear
 }
-
+press_enter()
+{
+    echo -en "\nPress Enter to continue"
+    read
+    clear
+}
 
 UninstallDocker-Compose()
 {
@@ -66,22 +71,34 @@ echo "All Done!"
 
 clear
 
+ ISCOMP=$( (docker-compose -v ) 2>&1 )
+ 
+
 echo "Let's figure out which OS / Distro you are running."
 echo ""
 echo ""
 echo "    From some basic information on your system, you appear to be running: "
-echo "        --  Docker version:                " $(docker -v)
+echo "        --  Docker version:                " $ISCOMP
 echo "        --  Docker-compose version:        " $(docker compose version)
 echo "        --  OSVer        " $(lsb_release -r)
 echo "        --  CdNme        " $(lsb_release -c)
 echo ""
 echo "------------------------------------------------"
 echo ""
-PS3="Please select What u Wanna do "
+
+if [[ "$ISCOMP" == *"command not found"* ]]; then
+        read -rp "Docker-Compose (y/n): " DCOMP
+    else
+        echo "Docker-compose appears to be installed."
+        echo ""
+        echo ""
+    fi
+
+PS3="Please select What u Wanna do " \
 
 select _ in \
     "Uninstall Docker" \
-    "Debian 10/11 (Buster / Bullseye)" \
+    "Uninstal Docker-Compose" \
     "Ubuntu 18.04 (Bionic)" \
     "Ubuntu 20.04 / 21.04 (Focal / Hirsute)" \
     "Arch Linux" \

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Uninstall Script
-var='
+
 if [ "${USER}" != "root" ]; then
     echo "$0 must be run as root!"
     exit 2
@@ -28,6 +28,5 @@ rm -f /usr/local/bin/docker-compose
 echo "Removing boot2docker.iso"
 rm -rf /usr/local/share/boot2docker
 
-echo "All Done!" '
+echo "All Done!" 
 
-echo $var
