@@ -20,13 +20,19 @@ done
 echo "Removing Applications..."
 sudo apt-get purge docker-ce docker-ce-cli containerd.io docker-compose-plugin 
 
+sleep 2s
+
 echo "Removing docker binaries..."
 rm -f /usr/local/bin/docker
 rm -rf /var/lib/docker
 rm -rf /var/lib/containerd
 
+sleep 2s
+
 echo "Auto-Removing..."
 apt auto-remove
+
+sleep 2s
 
 echo "All Done!" 
 clear
@@ -48,7 +54,7 @@ fi
 while true; do
   read -p "Remove Docker Compose (Y/N): " yn
   case $yn in
-    [Yy]* ) docker -v $(docker ps); break;;
+    [Yy]* ) docker-compose version $(docker-compose version); break;;
     [Nn]* ) echo " Bye Bye " ; exit;;
     * ) echo "Please answer yes or no."; exit 1;;
   esac
@@ -71,14 +77,11 @@ echo "All Done!"
 
 clear
 
- ISCOMP=$( (docker-compose -v ) 2>&1 )
- 
-
-echo "Let's figure out which OS / Distro you are running."
+echo "Let's figure what is running."
 echo ""
 echo ""
 echo "    From some basic information on your system, you appear to be running: "
-echo "        --  Docker version:                " $ISCOMP
+echo "        --  Docker version:                " $(docker-compose -v )
 echo "        --  Docker-compose version:        " $(docker compose version)
 echo "        --  OSVer        " $(lsb_release -r)
 echo "        --  CdNme        " $(lsb_release -c)
@@ -86,16 +89,9 @@ echo ""
 echo "------------------------------------------------"
 echo ""
 
-if [[ "$ISCOMP" == *"command not found"* ]]; then
-        read -rp "Docker-Compose (y/n): " DCOMP
-    else
-        echo "Docker-compose appears to be installed."
-        echo ""
-        echo ""
-    fi
 
-PS3="Please select What u Wanna do " \
 
+PS3="Please select What u Wanna do " 
 select _ in \
     "Uninstall Docker" \
     "Uninstal Docker-Compose" \
@@ -114,4 +110,3 @@ do
     *) echo "Invalid selection, please try again..." ;;
   esac
 done
-clear
