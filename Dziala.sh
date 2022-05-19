@@ -1,4 +1,5 @@
 #!/bin/bash
+
 installApps()
 {
     clear
@@ -218,7 +219,7 @@ startInstall()
         ###     Install Debian / Ubuntu    ###
         ######################################        
         
-        if [[ "$OS" != "1" ]]; then
+        if [[ "$OS" != "4" ]]; then
             sudo apt install docker-compose -y >> ~/docker-script-install.log 2>&1
         fi
 

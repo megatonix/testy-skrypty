@@ -240,7 +240,7 @@ startInstall()
         echo ""
 
         echo "- Docker Compose Version is now: " 
-        docker-compose --version
+        docker compose version
         echo ""
         echo ""
         sleep 3s
