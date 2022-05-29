@@ -1,0 +1,76 @@
+version: '3'
+
+volumes:
+
+  nextcloud:
+
+  db:
+
+services:
+
+  db:
+
+    image: mariadb
+
+    restart: always
+
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW --innodb-file-per-table=1 --skip-innodb-read-only-compressed
+
+    volumes:
+
+      - db:/var/lib/mysql
+
+    environment:
+
+      - MYSQL_ROOT_PASSWORD=zxcv
+
+      - MYSQL_PASSWORD=zxcv
+
+      - MYSQL_DATABASE=db
+
+      - MYSQL_USER=mysqluser
+
+  redis:
+
+    image: redis
+
+    restart: always
+
+    command: redis-server --requirepass zxcv
+
+  app:
+
+    image: nextcloud
+
+    restart: always
+
+    ports:
+
+      - 8080:80
+
+    links:
+
+      - db
+      - redis
+
+    volumes:
+
+      - nextcloud:/var/www/html
+
+    environment:
+
+      - MYSQL_PASSWORD=zxcv
+
+      - MYSQL_DATABASE=db
+
+      - MYSQL_USER=mysqluser
+
+      - MYSQL_HOST=db
+
+      - REDIS_HOST_PASSWORD=zxcv
+
+    depends_on:
+
+      - db
+
+      - redis
